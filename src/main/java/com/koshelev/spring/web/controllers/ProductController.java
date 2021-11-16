@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 @Controller
-public class MainController {
+public class ProductController {
     private ProductRepository productRepository;
 
     @Autowired
