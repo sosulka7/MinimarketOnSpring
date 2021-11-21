@@ -3,7 +3,7 @@ package com.koshelev.spring.web.data;
 public class Product {
     private Long id;
     private String title;
-    private double cost;
+    private Double cost;
 
     public Product(Long id, String title, double cost) {
         this.id = id;
