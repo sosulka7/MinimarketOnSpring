@@ -1,35 +1,35 @@
 package com.koshelev.spring.web.controllers;
 
 import com.koshelev.spring.web.data.Product;
-import com.koshelev.spring.web.repositories.ProductRepository;
+import com.koshelev.spring.web.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
-@Controller
+@RestController
 public class ProductController {
-    private ProductRepository productRepository;
+    private ProductService productService;
 
     @Autowired
-    public void setProductRepository(ProductRepository productRepository){
-        this.productRepository = productRepository;
-    }
-
-
-
-    @GetMapping("/products/{id}")
-    private String showProductInfo(@PathVariable Long id, Model model){
-        Product product = productRepository.getProductById(id);
-        model.addAttribute("product", product);
-        return "product_info";
+    public void setProductRepository(ProductService productService){
+        this.productService = productService;
     }
 
     @GetMapping("/products")
-    private String showProductsPage(Model model){
-        model.addAttribute("products",productRepository.getProductList());
-        return "products_page";
+    public List<Product> getAllProducts(){
+        return productService.getProductList();
+    }
+
+    @GetMapping("/products/delete/{id}")
+    public void deleteById(@PathVariable Long id){
+        productService.deleteById(id);
+    }
+
+    @GetMapping("/products/change_cost")
+    public void changeCost(@RequestParam Long productId, @RequestParam Double delta){
+        productService.changeCost(productId, delta);
     }
 }
