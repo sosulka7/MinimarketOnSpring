@@ -1,42 +1,20 @@
 package com.koshelev.spring.web.repositories;
 
-import com.koshelev.spring.web.data.Product;
+import com.koshelev.spring.web.entities.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Component
-public class ProductRepository {
-    private List<Product> products;
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @PostConstruct
-    public void init(){
-        products = new ArrayList<>(Arrays.asList(
-                new Product(1L, "Молоко" , 50.00),
-                new Product(2L, "Хлеб" , 35.5),
-                new Product(3L, "Пряники" , 68.30),
-                new Product(4L, "Макароны" , 45.00),
-                new Product(5L, "Пельмени" , 200.00)
-        ));
-    }
+    List<Product> findAllByCostBetween(Double min, Double max);
 
-    public List<Product> getProductList() {
-        return Collections.unmodifiableList(products);
-    }
+    @Query("select p from Product p where p.cost > :minCost")
+    List<Product> findProductsHighMinCost(Double minCost);
 
-    public Product getProductById(Long id){
-        if (id > 0 && id <= 5){
-            return products.stream().filter(p -> p.getId().equals(id)).findFirst().orElseThrow(()-> new RuntimeException());
-        }
-        return null;
-    }
-
-    public void deleteById(Long id){
-        products.removeIf(s -> s.getId().equals(id));
-    }
-
+    @Query("select p from Product p where p.cost < :maxCost")
+    List<Product> findProductsLowMaxCost(Double maxCost);
 }
