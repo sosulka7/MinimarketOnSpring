@@ -4,9 +4,9 @@ import com.koshelev.spring.web.entities.Product;
 import com.koshelev.spring.web.exceptions.ResourceNotFoundException;
 import com.koshelev.spring.web.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 
 @RestController
@@ -18,9 +18,21 @@ public class ProductController {
         this.productService = productService;
     }
 
+//    только фильтрация по минимальной или максимальной цене (работает)
+//    @GetMapping("/products")
+//    public List<Product> getProducts(@RequestParam (defaultValue = "0", required = false) Double minCost,
+//                                     @RequestParam (defaultValue = "10000", required = false) Double maxCost){
+//        return productService.findProductsByCostBetween(minCost, maxCost);
+//    }
+
+    //попытка пагинации (почти удачная), при переходе на эндпоинт (а не на index.html) и указании номера страницы
+    //в RequestParam отображает корректное количество продуктов в виде json'ов
+    //проблема где-то в ангуляре :(
     @GetMapping("/products")
-    public List<Product> getAllProducts(){
-        return productService.getProductList();
+    public Page<Product> getProducts(@RequestParam (defaultValue = "0", required = false) Double minCost,
+                                     @RequestParam (defaultValue = "10000", required = false) Double maxCost,
+                                     @RequestParam (defaultValue = "0", required = false)Integer pageNumber){
+        return productService.findProductsByMinAndMaxCost(minCost, maxCost, pageNumber);
     }
 
     @GetMapping("/products/{id}")
@@ -31,21 +43,6 @@ public class ProductController {
     @GetMapping("/products/delete/{id}")
     public void deleteById(@PathVariable Long id){
         productService.deleteById(id);
-    }
-
-    @GetMapping("/products/cost_between")
-    public List<Product> getProductsByCostBetween(@RequestParam(defaultValue = "0") Double min, @RequestParam Double max){
-        return productService.findProductsByCostBetween(min, max);
-    }
-
-    @GetMapping("/products/high_{min}")
-    public List<Product> getProductsHighMinCost(@PathVariable Double min){
-        return productService.getProductsHighMinCost(min);
-    }
-
-    @GetMapping("/products/low_{max}")
-    public List<Product> getProductsLowMaxCost(@PathVariable Double max) {
-        return productService.getProductsLowMaxCost(max);
     }
 
     @PostMapping("/products/new_prod")
