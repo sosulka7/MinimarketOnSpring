@@ -15,13 +15,15 @@
 
 <div class="container" ng-controller="indexController">
     <p></p>
-    <h3>Фильтр по цене</h3>
+    <h3>Фильтр</h3>
     <form novalidate ng-submit="loadProducts()">
-        <input class="form-control" type="number" placeholder="От" ng-model="costFilter.minCost">
+        <input class="form-control" type="number" placeholder="От" ng-model="filter.minCost">
         <p></p>
-        <input class="form-control" type="number" placeholder="До" ng-model="costFilter.maxCost">
+        <input class="form-control" type="number" placeholder="До" ng-model="filter.maxCost">
         <p></p>
-        <input class="form-control" type="number" placeholder="Номер страницы" ng-model="page.pageNumber">
+        <input class="form-control" type="text" placeholder="Наименование" ng-model="filter.titlePart">
+        <p></p>
+        <input class="form-control" type="number" placeholder="Номер страницы" ng-model="filter.pageNumber">
         <p></p>
         <button type="submit" class="btn btn-primary">Применить</button>
     </form>

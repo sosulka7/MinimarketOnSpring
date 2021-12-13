@@ -1,5 +1,7 @@
 package com.koshelev.spring.web.entities;
 
+import com.koshelev.spring.web.dto.ProductDto;
+
 import javax.persistence.*;
 
 @Entity
@@ -40,6 +42,11 @@ public class Product {
         this.cost = cost;
     }
 
+    public Product(ProductDto productDto){
+        this.id = productDto.getId();
+        this.title = productDto.getTitle();
+        this.cost = productDto.getCost();
+    }
     public Product() {
     }
 }

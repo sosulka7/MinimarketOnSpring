@@ -1,5 +1,5 @@
 angular.module('app', []).controller('indexController', function ($scope, $http) {
-    const contextPath = 'http://localhost:8189/app';
+    const contextPath = 'http://localhost:8189/app/api/v1';
 
 
     $scope.loadProducts = function () {
@@ -7,37 +7,19 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             url: contextPath + '/products',
             method: 'GET',
             params: {
-                minCost: $scope.costFilter ? $scope.costFilter.minCost : null,
-                maxCost: $scope.costFilter ? $scope.costFilter.maxCost : null,
-                pageNumber: $scope.page ? $scope.page.pageNumber : null
+                minCost: $scope.filter ? $scope.filter.minCost : null,
+                maxCost: $scope.filter ? $scope.filter.maxCost : null,
+                titlePart: $scope.filter ? $scope.filter.titlePart : null,
+                //для номера страницы пока что поле ввода
+                pageNumber: $scope.filter ? $scope.filter.pageNumber : null
             }
         }).then(function (response){
-            $scope.ProductList = response.data;
+            $scope.ProductList = response.data.content;
         });
     };
-
-    /*
-    Почему в таком варианте функция не работает?
-    В моем понимании, при открытии сайта она должна выполняться следующим образом:
-    т.к. в ней есть RequestParam, то они могут быть указаны, но они помечены в контроллере как не обязательные
-    и если их не указать, то должны подставиться дефолтные значения и уже по ним отобразится список продуктов.
-
-    $scope.loadProducts = function () {
-        $http({
-            url: contextPath + '/products',
-            method: 'GET',
-            params: {
-                minCost: $scope.costFilter.minCost,
-                maxCost: $scope.costFilter.maxCost
-            }
-        }).then(function (response){
-            $scope.ProductList = response.data;
-        });
-    };
-    */
 
     $scope.deleteProduct = function (id) {
-        $http.get(contextPath + '/products/delete/' + id)
+        $http.delete(contextPath + '/products/' + id)
             .then(function (response) {
                 $scope.loadProducts();
             });
