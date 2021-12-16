@@ -1,10 +1,12 @@
 package com.koshelev.spring.web.controllers;
 
+import com.koshelev.spring.web.converters.ProductConverter;
 import com.koshelev.spring.web.dto.ProductDto;
 import com.koshelev.spring.web.entities.Product;
 import com.koshelev.spring.web.exceptions.ResourceNotFoundException;
 import com.koshelev.spring.web.services.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.koshelev.spring.web.validators.ProductValidator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,13 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@RequiredArgsConstructor
 public class ProductController {
-    private ProductService productService;
-
-    @Autowired
-    public void setProductService(ProductService productService){
-        this.productService = productService;
-    }
+    private final ProductService productService;
+    private final ProductConverter productConverter;
+    private final ProductValidator productValidator;
 
     @GetMapping
     public Page<ProductDto> getProducts(@RequestParam (required = false) Double minCost,
@@ -28,12 +28,13 @@ public class ProductController {
         if (pageNumber < 1){
             pageNumber = 1;
         }
-        return productService.find(minCost, maxCost, titlePart, pageNumber).map(p -> new ProductDto(p));
+        return productService.findAll(minCost, maxCost, titlePart, pageNumber).map(p -> productConverter.entityToDto(p));
     }
 
     @GetMapping("/{id}")
     public ProductDto getProductById(@PathVariable Long id){
-        return new ProductDto(productService.getProductById(id).orElseThrow(() -> new ResourceNotFoundException("Product with ID - " + id + " not found")));
+        Product product = productService.getProductById(id).orElseThrow(() -> new ResourceNotFoundException("Product with ID - " + id + " not found"));
+        return productConverter.entityToDto(product);
     }
 
     @DeleteMapping("/{id}")
@@ -43,14 +44,16 @@ public class ProductController {
 
     @PostMapping
     public ProductDto createNewProduct(@RequestBody ProductDto productDto){
-        Product product = new Product(productDto);
+        productValidator.validate(productDto);
+        Product product = productConverter.dtoToEntity(productDto);
         productService.save(product);
-        return new ProductDto(product);
+        return productConverter.entityToDto(product);
     }
 
     @PutMapping
-    public ProductDto updateProduct(@RequestBody ProductDto product){
-        productService.save(new Product(product));
-        return product;
+    public ProductDto updateProduct(@RequestBody ProductDto productDto){
+        productValidator.validate(productDto);
+        Product product = productService.update(productDto);
+        return productConverter.entityToDto(product);
     }
 }
