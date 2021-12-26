@@ -1,12 +1,17 @@
 package com.koshelev.spring.web.services;
 
+import com.koshelev.spring.web.dto.ProductDto;
 import com.koshelev.spring.web.entities.Product;
+import com.koshelev.spring.web.exceptions.ResourceNotFoundException;
 import com.koshelev.spring.web.repositories.ProductRepository;
+import com.koshelev.spring.web.repositories.specifications.ProductSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,31 +23,37 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> getProductList(){
-        return productRepository.findAll();
-    }
-
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         productRepository.deleteById(id);
     }
 
-    public Optional<Product> getProductById(Long id){
+    public Optional<Product> getProductById(Long id) {
         return productRepository.findById(id);
     }
 
-    public List<Product> findProductsByCostBetween(Double min, Double max){
-        return productRepository.findAllByCostBetween(min, max);
+    public Page<Product> findAll(Double minCost, Double maxCost, String titlePart, Integer numberPage) {
+        Specification<Product> spec = Specification.where(null);
+        if (minCost != null) {
+            spec = spec.and(ProductSpecifications.costGreaterThanOrEqualsIndicate(minCost));
+        }
+        if (maxCost != null) {
+            spec = spec.and(ProductSpecifications.costLessThanOrEqualsIndicate(maxCost));
+        }
+        if (titlePart != null) {
+            spec = spec.and(ProductSpecifications.titleLike(titlePart));
+        }
+        return productRepository.findAll(spec, PageRequest.of(numberPage - 1, 50));
     }
 
-    public List<Product> getProductsHighMinCost(Double min){
-        return productRepository.findProductsHighMinCost(min);
+    public Product save(Product product) {
+        return productRepository.save(product);
     }
 
-    public List<Product> getProductsLowMaxCost(Double max){
-        return productRepository.findProductsLowMaxCost(max);
-    }
-
-    public void createNewProduct(Product product){
-        productRepository.save(product);
+    @Transactional
+    public Product update(ProductDto productDto) {
+        Product product = productRepository.findById(productDto.getId()).orElseThrow(() -> new ResourceNotFoundException("Попытка обновить продукт не удалась. Продукт с таким id не найден в базе. id: " + productDto.getId()));
+        product.setCost(productDto.getCost());
+        product.setTitle(productDto.getTitle());
+        return product;
     }
 }
