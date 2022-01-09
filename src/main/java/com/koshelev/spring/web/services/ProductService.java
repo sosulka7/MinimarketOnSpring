@@ -31,7 +31,7 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
-    public Page<Product> findAll(Double minCost, Double maxCost, String titlePart, Integer numberPage) {
+    public Page<Product> findAll(Integer minCost, Integer maxCost, String titlePart, Integer numberPage) {
         Specification<Product> spec = Specification.where(null);
         if (minCost != null) {
             spec = spec.and(ProductSpecifications.costGreaterThanOrEqualsIndicate(minCost));

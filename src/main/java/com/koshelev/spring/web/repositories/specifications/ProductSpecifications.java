@@ -5,11 +5,11 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class ProductSpecifications {
 
-    public static Specification<Product> costLessThanOrEqualsIndicate(Double cost){
+    public static Specification<Product> costLessThanOrEqualsIndicate(Integer cost){
         return ((root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("cost"), cost));
     }
 
-    public static Specification<Product> costGreaterThanOrEqualsIndicate(Double cost){
+    public static Specification<Product> costGreaterThanOrEqualsIndicate(Integer cost){
         return ((root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("cost"), cost));
     }
     public static Specification<Product> titleLike (String titlePart){
