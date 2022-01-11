@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -30,4 +31,15 @@ public class Order {
 
     @Column(name = "phone")
     private String phone;
+
+    @OneToMany(mappedBy = "orderId")
+    private List<OrderItem> orderItems;
+
+
+    public Order(User userId, Integer totalPrice, String address, String phone) {
+        this.userId = userId;
+        this.totalPrice = totalPrice;
+        this.address = address;
+        this.phone = phone;
+    }
 }

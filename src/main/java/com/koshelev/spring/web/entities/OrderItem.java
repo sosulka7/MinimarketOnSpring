@@ -23,10 +23,6 @@ public class OrderItem {
     private Product productId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User userId;
-
-    @ManyToOne
     @JoinColumn(name = "order_id")
     private Order orderId;
 
@@ -38,4 +34,12 @@ public class OrderItem {
 
     @Column(name = "price")
     private Integer price;
+
+    public OrderItem(Product productId, Order orderId, Integer quantity, Integer pricePerProduct, Integer price) {
+        this.productId = productId;
+        this.orderId = orderId;
+        this.quantity = quantity;
+        this.pricePerProduct = pricePerProduct;
+        this.price = price;
+    }
 }

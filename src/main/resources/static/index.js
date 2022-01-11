@@ -91,20 +91,13 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         }
     };
 
-    $scope.createOrder = function (){
-        $http({
-            url: 'http://localhost:8189/app/api/v1/orders/create',
-            method: 'GET',
-            params: {
-                phone_number: $scope.order ? $scope.order.phone_number : null,
-                address: $scope.order ? $scope.order.address : null,
-            }
-        }).then(function successCallback (response){
-            alert('Жижа' + response.data)
-        }, function errorCallback(response) {
-            alert('UNAUTHORIZED');
-        });
-    }
+    $scope.createOrder = function () {
+        $http.post(contextPath + '/orders/create', $scope.order)
+            .then(function (response) {
+
+            });
+    };
+
 
     $scope.loadProducts();
     $scope.loadCart();
