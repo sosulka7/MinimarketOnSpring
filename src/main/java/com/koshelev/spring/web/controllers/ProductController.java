@@ -21,8 +21,8 @@ public class ProductController {
     private final ProductValidator productValidator;
 
     @GetMapping
-    public Page<ProductDto> getProducts(@RequestParam (required = false) Double minCost,
-                                        @RequestParam (required = false) Double maxCost,
+    public Page<ProductDto> getProducts(@RequestParam (required = false) Integer minCost,
+                                        @RequestParam (required = false) Integer maxCost,
                                         @RequestParam (required = false) String titlePart,
                                         @RequestParam (defaultValue = "1") Integer pageNumber){
         if (pageNumber < 1){

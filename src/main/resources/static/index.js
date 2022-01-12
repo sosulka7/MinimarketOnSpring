@@ -25,13 +25,48 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
                 if (response.data.token) {
                     $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
                     $localStorage.springWebUser = {username: $scope.user.username, token: response.data.token};
-
                     $scope.user.username = null;
                     $scope.user.password = null;
                 }
             }, function errorCallback(response) {
             });
     };
+
+    $scope.addToCart = function (productId) {
+        $http.get('http://localhost:8189/app/api/v1/cart/add/' + productId)
+            .then(function (response) {
+
+                $scope.loadCart();
+            });
+    }
+
+    $scope.clearCart = function () {
+        $http.get('http://localhost:8189/app/api/v1/cart/clear')
+            .then(function (response) {
+                $scope.loadCart();
+            });
+    }
+
+    $scope.loadCart = function () {
+        $http.get('http://localhost:8189/app/api/v1/cart')
+            .then(function (response) {
+                $scope.Cart = response.data;
+            });
+    }
+
+    $scope.changeQuantity = function (productId, delta) {
+        $http({
+            url: contextPath + '/cart/change_quantity',
+            method: 'GET',
+            params: {
+                productId: productId,
+                delta: delta
+            }
+        }).then(function (response){
+            $scope.loadCart();
+        });
+    }
+
 
     $scope.tryToLogout = function () {
         $scope.clearUser();
@@ -56,6 +91,14 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         }
     };
 
+    $scope.createOrder = function () {
+        $http.post(contextPath + '/orders/create', $scope.order)
+            .then(function (response) {
+
+            });
+    };
+
 
     $scope.loadProducts();
+    $scope.loadCart();
 });
