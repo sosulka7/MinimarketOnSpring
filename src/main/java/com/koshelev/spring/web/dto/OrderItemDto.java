@@ -1,11 +1,13 @@
 package com.koshelev.spring.web.dto;
 
 import com.koshelev.spring.web.entities.Product;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderItemDto {
     private Long productId;
     private String productTitle;

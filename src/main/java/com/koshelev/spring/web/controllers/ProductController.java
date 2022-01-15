@@ -21,14 +21,14 @@ public class ProductController {
     private final ProductValidator productValidator;
 
     @GetMapping
-    public Page<ProductDto> getProducts(@RequestParam (required = false) Integer minCost,
-                                        @RequestParam (required = false) Integer maxCost,
-                                        @RequestParam (required = false) String titlePart,
+    public Page<ProductDto> getProducts(@RequestParam (name = "min_price",required = false) Integer minPrice,
+                                        @RequestParam (name = "max_price",required = false) Integer maxPrice,
+                                        @RequestParam (name = "title_part",required = false) String titlePart,
                                         @RequestParam (defaultValue = "1") Integer pageNumber){
         if (pageNumber < 1){
             pageNumber = 1;
         }
-        return productService.findAll(minCost, maxCost, titlePart, pageNumber).map(p -> productConverter.entityToDto(p));
+        return productService.findAll(minPrice, maxPrice, titlePart, pageNumber).map(p -> productConverter.entityToDto(p));
     }
 
     @GetMapping("/{id}")

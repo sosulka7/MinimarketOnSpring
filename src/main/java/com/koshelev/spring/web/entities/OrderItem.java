@@ -3,8 +3,10 @@ package com.koshelev.spring.web.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "order_items")
@@ -20,11 +22,11 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private Product productId;
+    private Product product;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Order orderId;
+    private Order order;
 
     @Column(name = "quantity")
     private Integer quantity;
@@ -35,11 +37,11 @@ public class OrderItem {
     @Column(name = "price")
     private Integer price;
 
-    public OrderItem(Product productId, Order orderId, Integer quantity, Integer pricePerProduct, Integer price) {
-        this.productId = productId;
-        this.orderId = orderId;
-        this.quantity = quantity;
-        this.pricePerProduct = pricePerProduct;
-        this.price = price;
-    }
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @CreationTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

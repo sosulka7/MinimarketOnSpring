@@ -3,8 +3,10 @@ package com.koshelev.spring.web.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "products")
@@ -24,4 +26,17 @@ public class Product {
     @Column(name = "cost")
     private Integer cost;
 
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @CreationTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    public Product(Long id, String title, Integer cost) {
+        this.id = id;
+        this.title = title;
+        this.cost = cost;
+    }
 }

@@ -1,5 +1,6 @@
 package com.koshelev.spring.web.services;
 
+import com.koshelev.spring.web.dto.Cart;
 import com.koshelev.spring.web.dto.OrderDetailsDto;
 import com.koshelev.spring.web.dto.OrderItemDto;
 import com.koshelev.spring.web.entities.Order;
@@ -11,30 +12,37 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final UserService userService;
     private final CartService cartService;
-    private final OrderItemService orderItemService;
     private final ProductService productService;
 
     @Transactional
-    public void createOrder(OrderDetailsDto odd, String username){
-        User user = userService.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException(String.format("Пользователь с никнеймом %s не найден.", username)));
-        Order order = new Order(user, cartService.getCurrentCart().getTotalPrice(), odd.getAddress(), odd.getPhoneNumber());
+    public void createOrder(OrderDetailsDto odd, User user){
+        Cart currentCart = cartService.getCurrentCart();
+        Order order = new Order(user, currentCart.getTotalPrice(), odd.getAddress(), odd.getPhoneNumber());
+        List<OrderItem> items = currentCart.getItems().stream()
+                .map(o -> {
+                    OrderItem item = new OrderItem();
+                    item.setOrder(order);
+                    item.setQuantity(o.getQuantity());
+                    item.setPrice(o.getPrice());
+                    item.setPricePerProduct(o.getPricePerProduct());
+                    item.setProduct(productService.getProductById(o.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Продукт не найден. ID: " + o.getProductId())));
+                    return item;
+                }).collect(Collectors.toList());
+        order.setOrderItems(items);
         orderRepository.save(order);
+        currentCart.clear();
+    }
 
-        for (OrderItemDto oid : cartService.getCurrentCart().getItems()) {
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrderId(order);
-            orderItem.setProductId(productService.getProductById(oid.getProductId()).orElseThrow(()-> new ResourceNotFoundException("Продукт не найден. ID: " + oid.getProductId())));
-            orderItem.setPrice(oid.getPrice());
-            orderItem.setQuantity(oid.getQuantity());
-            orderItem.setPricePerProduct(oid.getPricePerProduct());
-            orderItemService.save(orderItem);
-        }
+    public List<Order> findOrdersByUsername(String username){
+        return orderRepository.findAllByUsername(username);
     }
 }

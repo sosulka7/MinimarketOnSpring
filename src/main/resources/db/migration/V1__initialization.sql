@@ -1,7 +1,9 @@
 create table if not exists products (
                                         id bigserial primary key,
                                         title varchar(255),
-                                        cost int
+                                        cost int,
+                                        created_at timestamp default current_timestamp,
+                                        updated_at timestamp default current_timestamp
 );
 
 insert into products (title, cost)
@@ -34,7 +36,7 @@ create table users (
 insert into users (username, password, email)
 values ('bob', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'bobby@gmail.com'),
        ('mike', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'mike@gmail.com'),
-       ('john', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'jon@gmail.com');
+       ('john', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'john@gmail.com');
 
 create table roles (
     id bigserial primary key,
@@ -62,7 +64,9 @@ create table orders (
                         user_id         bigint not null references users (id),
                         total_price     int not null,
                         address         varchar(255),
-                        phone           varchar(255)
+                        phone           varchar(255),
+                        created_at timestamp default current_timestamp,
+                        updated_at timestamp default current_timestamp
 );
 
 create table order_items (
@@ -71,6 +75,8 @@ create table order_items (
                              order_id                bigint not null references orders (id),
                              quantity                int not null,
                              price_per_product       int not null,
-                             price                   int not null
+                             price                   int not null,
+                             created_at timestamp default current_timestamp,
+                             updated_at timestamp default current_timestamp
 );
 
