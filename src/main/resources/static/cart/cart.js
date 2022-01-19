@@ -3,7 +3,7 @@ angular.module('market-front').controller('cartController', function ($scope, $h
 
 
     $scope.loadCart = function () {
-        $http.get(contextPath + 'api/v1/cart')
+        $http.get(contextPath + 'api/v1/cart/' + $localStorage.springWebGuestCartId)
             .then(function (response) {
                 $scope.cart = response.data;
             });
@@ -14,24 +14,24 @@ angular.module('market-front').controller('cartController', function ($scope, $h
     };
 
     $scope.clearCart = function () {
-        $http.get(contextPath + 'api/v1/cart/clear')
+        $http.get(contextPath + 'api/v1/cart/' + $localStorage.springWebGuestCartId + '/clear')
             .then(function (response) {
                 $scope.loadCart();
             });
     };
 
-    $scope.changeQuantity = function (productId, delta) {
-        $http({
-            url: contextPath + 'api/v1/cart/change_quantity',
-            method: 'GET',
-            params: {
-                productId: productId,
-                delta: delta
-            }
-        }).then(function (response) {
-            $scope.loadCart();
-        });
-    };
+    // $scope.changeQuantity = function (productId, delta) {
+    //     $http({
+    //         url: contextPath + 'api/v1/cart/change_quantity',
+    //         method: 'GET',
+    //         params: {
+    //             productId: productId,
+    //             delta: delta
+    //         }
+    //     }).then(function (response) {
+    //         $scope.loadCart();
+    //     });
+    // };
 
     $scope.checkOut = function () {
         $http.post(contextPath + 'api/v1/orders', $scope.orderDetails)

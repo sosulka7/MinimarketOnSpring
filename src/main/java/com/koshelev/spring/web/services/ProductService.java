@@ -31,7 +31,7 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
-    public Page<Product> findAll(Integer minCost, Integer maxCost, String titlePart, Integer numberPage) {
+    public Page<Product> findAll(Integer minCost, Integer maxCost, String titlePart, String category, Integer numberPage) {
         Specification<Product> spec = Specification.where(null);
         if (minCost != null) {
             spec = spec.and(ProductSpecifications.costGreaterThanOrEqualsIndicate(minCost));
@@ -42,7 +42,10 @@ public class ProductService {
         if (titlePart != null) {
             spec = spec.and(ProductSpecifications.titleLike(titlePart));
         }
-        return productRepository.findAll(spec, PageRequest.of(numberPage - 1, 50));
+        if (category != null) {
+            spec = spec.and(ProductSpecifications.categoryEquals(category));
+        }
+        return productRepository.findAll(spec, PageRequest.of(numberPage - 1, 10));
     }
 
     public Product save(Product product) {

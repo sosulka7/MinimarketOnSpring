@@ -25,7 +25,8 @@ public class OrderService {
 
     @Transactional
     public void createOrder(OrderDetailsDto odd, User user){
-        Cart currentCart = cartService.getCurrentCart();
+        String cartKey = cartService.getCartUuidFromSuffix(user.getUsername());
+        Cart currentCart = cartService.getCurrentCart(cartKey);
         Order order = new Order(user, currentCart.getTotalPrice(), odd.getAddress(), odd.getPhoneNumber());
         List<OrderItem> items = currentCart.getItems().stream()
                 .map(o -> {
@@ -39,7 +40,7 @@ public class OrderService {
                 }).collect(Collectors.toList());
         order.setOrderItems(items);
         orderRepository.save(order);
-        currentCart.clear();
+        cartService.clearCart(cartKey);
     }
 
     public List<Order> findOrdersByUsername(String username){
