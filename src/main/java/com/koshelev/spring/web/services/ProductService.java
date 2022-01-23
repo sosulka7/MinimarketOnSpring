@@ -12,7 +12,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -48,6 +51,8 @@ public class ProductService {
         return productRepository.findAll(spec, PageRequest.of(numberPage - 1, 10));
     }
 
+
+
     public Product save(Product product) {
         return productRepository.save(product);
     }
@@ -59,4 +64,24 @@ public class ProductService {
         product.setTitle(productDto.getTitle());
         return product;
     }
+
+    //Как бы и сущность переименовывать не хотелось бы и сгенерированный класс тоже
+    //поэтому оставил так. Не знаю, как лучше сделать.
+    public List<com.koshelev.spring.web.soap.products.Product> getAllProductsSoap(){
+        return productRepository.findAll().stream().map(functionEntityToSoap).collect(Collectors.toList());
+    }
+
+    public com.koshelev.spring.web.soap.products.Product getProductByIdSoap(Long id){
+        return productRepository.findById(id).map(functionEntityToSoap).get();
+    }
+
+    public static final Function<Product, com.koshelev.spring.web.soap.products.Product> functionEntityToSoap = p -> {
+        com.koshelev.spring.web.soap.products.Product product = new com.koshelev.spring.web.soap.products.Product();
+        product.setId(p.getId());
+        product.setTitle(p.getTitle());
+        product.setCost(p.getCost());
+        return product;
+    };
+
+
 }
