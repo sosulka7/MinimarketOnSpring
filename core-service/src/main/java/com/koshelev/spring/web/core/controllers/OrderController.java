@@ -7,6 +7,7 @@ import com.koshelev.spring.web.core.dto.OrderDetailsDto;
 import com.koshelev.spring.web.core.dto.OrderDto;
 import com.koshelev.spring.web.core.services.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -28,7 +29,7 @@ public class OrderController {
     public void createOrder(@RequestBody OrderDetailsDto orderDetailsDto, @RequestHeader String username){
         CartDto cartDto = restTemplate.getForObject("http://localhost:8080/web-market-cart/api/v1/cart?username={username}", CartDto.class, username);
         orderService.createOrder(orderDetailsDto, username, cartDto);
-        //по идее здесь надо отправить запрос на очистку корзины, потому что это лучше сделать только после создания заказа.
+        //по идее здесь надо отправить запрос на очистку корзины, потому что это лучше делать только после создания заказа.
         restTemplate.getForObject("http://localhost:8080/web-market-cart/api/v1/cart/clear?username={username}", Void.class, username);
     }
 
