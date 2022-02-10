@@ -1,6 +1,6 @@
 package com.koshelev.spring.web.core.validators;
 
-import com.koshelev.spring.web.api.dto.ProductDto;
+import com.koshelev.spring.web.api.core.ProductDto;
 import com.koshelev.spring.web.core.exceptions.ValidationException;
 import org.springframework.stereotype.Component;
 

@@ -1,14 +1,12 @@
 package com.koshelev.spring.web.cart.controllers;
 
-import com.koshelev.spring.web.api.dto.CartDto;
-import com.koshelev.spring.web.api.dto.ProductDto;
+import com.koshelev.spring.web.api.cart.CartDto;
 import com.koshelev.spring.web.api.dto.StringResponse;
 import com.koshelev.spring.web.cart.converters.CartConverter;
-import com.koshelev.spring.web.cart.dto.Cart;
 import com.koshelev.spring.web.cart.services.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
+
 
 
 @RestController
@@ -16,25 +14,11 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class CartController {
     private final CartService cartService;
-    private final RestTemplate restTemplate;
     private final CartConverter cartConverter;
 
     @GetMapping("/{uuid}")
     public CartDto getCart (@RequestHeader (required = false) String username, @PathVariable String uuid){
-        return cartConverter.cartToDto(cartService.getCurrentCart(getCurrentCartUuid(username, uuid)));
-    }
-
-    // ниже 2 метода для заказов, не смог найти, как можно в RestTemplates в хедеры
-    // подшить username. Такой способ первый пришел в голову
-    @GetMapping
-    public CartDto getCartForOrder (@RequestParam String username){
-        String cartKey = cartService.getCartUuidFromSuffix(username);
-        return cartConverter.cartToDto(cartService.getCurrentCart(cartKey));
-    }
-    @GetMapping("/clear")
-    public void clearCart(@RequestParam String username){
-        String cartKey = cartService.getCartUuidFromSuffix(username);
-        cartService.clearCart(cartKey);
+        return cartConverter.modelToDto(cartService.getCurrentCart(getCurrentCartUuid(username, uuid)));
     }
 
     @GetMapping("/generate")
@@ -44,8 +28,7 @@ public class CartController {
 
     @GetMapping("/{uuid}/add/{productId}")
     public void add(@RequestHeader (required = false) String username, @PathVariable String uuid, @PathVariable Long productId){
-        ProductDto productDto = restTemplate.getForObject("http://localhost:8189/web-market-core/api/v1/products/" + productId, ProductDto.class);
-        cartService.addToCart(getCurrentCartUuid(username, uuid), productDto);
+        cartService.addToCart(getCurrentCartUuid(username, uuid), productId);
     }
 
     @GetMapping("/{uuid}/clear")

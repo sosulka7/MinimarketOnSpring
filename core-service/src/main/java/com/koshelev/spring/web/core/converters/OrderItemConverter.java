@@ -1,6 +1,6 @@
 package com.koshelev.spring.web.core.converters;
 
-import com.koshelev.spring.web.api.dto.OrderItemDto;
+import com.koshelev.spring.web.api.core.OrderItemDto;
 import com.koshelev.spring.web.core.entities.OrderItem;
 import org.springframework.stereotype.Component;
 

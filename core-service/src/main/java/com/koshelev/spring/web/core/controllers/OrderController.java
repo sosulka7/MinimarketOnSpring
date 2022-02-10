@@ -1,16 +1,14 @@
 package com.koshelev.spring.web.core.controllers;
 
-import com.koshelev.spring.web.api.dto.CartDto;
+import com.koshelev.spring.web.api.cart.CartDto;
 import com.koshelev.spring.web.core.converters.OrderConverter;
 
-import com.koshelev.spring.web.core.dto.OrderDetailsDto;
-import com.koshelev.spring.web.core.dto.OrderDto;
+import com.koshelev.spring.web.api.core.OrderDetailsDto;
+import com.koshelev.spring.web.api.core.OrderDto;
 import com.koshelev.spring.web.core.services.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,15 +20,11 @@ public class OrderController {
 
     private final OrderService orderService;
     private final OrderConverter orderConverter;
-    private final RestTemplate restTemplate;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createOrder(@RequestBody OrderDetailsDto orderDetailsDto, @RequestHeader String username){
-        CartDto cartDto = restTemplate.getForObject("http://localhost:8080/web-market-cart/api/v1/cart?username={username}", CartDto.class, username);
-        orderService.createOrder(orderDetailsDto, username, cartDto);
-        //по идее здесь надо отправить запрос на очистку корзины, потому что это лучше делать только после создания заказа.
-        restTemplate.getForObject("http://localhost:8080/web-market-cart/api/v1/cart/clear?username={username}", Void.class, username);
+        orderService.createOrder(orderDetailsDto, username);
     }
 
     @GetMapping
@@ -38,4 +32,5 @@ public class OrderController {
         return orderService.findOrdersByUsername(username).stream()
                 .map(orderConverter::entityToDto).collect(Collectors.toList());
     }
+
 }

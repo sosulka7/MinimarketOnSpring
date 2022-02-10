@@ -18,6 +18,20 @@ angular.module('market-front').controller('storeController', function ($scope, $
         });
     };
 
+    $scope.loadPopularProductsInCart = function () {
+        $http.get(contextPath + 'rec/api/v1/in_cart')
+            .then(function (response) {
+                $scope.PopularProductsInCart = response.data;
+            });
+    };
+
+    $scope.loadPopularProductsInOrder = function () {
+        $http.get(contextPath + 'rec/api/v1/in_order')
+            .then(function (response) {
+                $scope.PopularProductsInOrder = response.data;
+            });
+    };
+
     $scope.generatePagesIndexes = function (startPage, endPage){
         let arr = [];
         for (let i = startPage; i < endPage + 1; i++) {
@@ -33,7 +47,8 @@ angular.module('market-front').controller('storeController', function ($scope, $
     }
 
     $scope.loadProducts();
-
+    $scope.loadPopularProductsInCart();
+    $scope.loadPopularProductsInOrder();
 });
 
 

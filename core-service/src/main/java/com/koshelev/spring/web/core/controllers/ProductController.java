@@ -2,7 +2,7 @@ package com.koshelev.spring.web.core.controllers;
 
 import com.koshelev.spring.web.api.exceptions.ResourceNotFoundException;
 import com.koshelev.spring.web.core.converters.ProductConverter;
-import com.koshelev.spring.web.api.dto.ProductDto;
+import com.koshelev.spring.web.api.core.ProductDto;
 import com.koshelev.spring.web.core.entities.Product;
 import com.koshelev.spring.web.core.services.ProductService;
 import com.koshelev.spring.web.core.validators.ProductValidator;
@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -30,6 +32,11 @@ public class ProductController {
             pageNumber = 1;
         }
         return productService.findAll(minPrice, maxPrice, titlePart, category, pageNumber).map(productConverter::entityToDto);
+    }
+
+    @PostMapping("/ids")
+    public List<ProductDto> getProducts(@RequestBody List<Long> productsId){
+        return productService.getProductByListId(productsId).stream().map(productConverter::entityToDto).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")

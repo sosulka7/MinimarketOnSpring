@@ -1,4 +1,4 @@
-package com.koshelev.spring.web.api.dto;
+package com.koshelev.spring.web.api.core;
 
 public class ProductDto {
 
