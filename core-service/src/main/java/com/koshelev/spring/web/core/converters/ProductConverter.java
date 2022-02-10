@@ -1,6 +1,6 @@
 package com.koshelev.spring.web.core.converters;
 
-import com.koshelev.spring.web.api.dto.ProductDto;
+import com.koshelev.spring.web.api.core.ProductDto;
 import com.koshelev.spring.web.core.entities.Product;
 import org.springframework.stereotype.Component;
 

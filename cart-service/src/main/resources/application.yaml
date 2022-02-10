@@ -5,4 +5,9 @@ server:
 utils:
   cart:
     prefix: SPRING_WEB_
+integrations:
+  core-service:
+    url: http://localhost:8189/web-market-core
+  rec-service:
+    url: http://localhost:8155/web-market-rec
 

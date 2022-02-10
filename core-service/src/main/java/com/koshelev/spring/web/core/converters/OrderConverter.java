@@ -1,6 +1,6 @@
 package com.koshelev.spring.web.core.converters;
 
-import com.koshelev.spring.web.core.dto.OrderDto;
+import com.koshelev.spring.web.api.core.OrderDto;
 import com.koshelev.spring.web.core.entities.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

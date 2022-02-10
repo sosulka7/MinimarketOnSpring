@@ -1,6 +1,6 @@
 package com.koshelev.spring.web.core;
 
-import com.koshelev.spring.web.api.dto.ProductDto;
+import com.koshelev.spring.web.api.core.ProductDto;
 import com.koshelev.spring.web.core.converters.ProductConverter;
 import com.koshelev.spring.web.core.entities.Product;
 import com.koshelev.spring.web.core.services.ProductService;
@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.util.Optional;
 

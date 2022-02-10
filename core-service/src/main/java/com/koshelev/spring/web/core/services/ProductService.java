@@ -1,7 +1,7 @@
 package com.koshelev.spring.web.core.services;
 
 import com.koshelev.spring.web.api.exceptions.ResourceNotFoundException;
-import com.koshelev.spring.web.api.dto.ProductDto;
+import com.koshelev.spring.web.api.core.ProductDto;
 import com.koshelev.spring.web.core.entities.Product;
 import com.koshelev.spring.web.core.repositories.ProductRepository;
 import com.koshelev.spring.web.core.repositories.specifications.ProductSpecifications;
@@ -34,6 +34,7 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
+    @Transactional
     public Page<Product> findAll(Integer minCost, Integer maxCost, String titlePart, String category, Integer numberPage) {
         Specification<Product> spec = Specification.where(null);
         if (minCost != null) {
@@ -51,9 +52,15 @@ public class ProductService {
         return productRepository.findAll(spec, PageRequest.of(numberPage - 1, 10));
     }
 
+    @Transactional
+    public List<Product> getProductByListId(List<Long> productsId){
+        List<Product> products = productsId.stream().map(id -> getProductById(id).get()).collect(Collectors.toList());
+        return products;
+    }
     public Product save(Product product) {
         return productRepository.save(product);
     }
+
 
     @Transactional
     public Product update(ProductDto productDto) {

@@ -1,16 +1,18 @@
-package com.koshelev.spring.web.api.dto;
+package com.koshelev.spring.web.api.cart;
+
+import com.koshelev.spring.web.api.core.OrderItemDto;
 
 import java.util.List;
 
 public class CartDto {
-    private List<OrderItemDto> items;
+    private List<CartItemDto> items;
     private int totalPrice;
 
-    public List<OrderItemDto> getItems() {
+    public List<CartItemDto> getItems() {
         return items;
     }
 
-    public void setItems(List<OrderItemDto> items) {
+    public void setItems(List<CartItemDto> items) {
         this.items = items;
     }
 
@@ -22,7 +24,7 @@ public class CartDto {
         this.totalPrice = totalPrice;
     }
 
-    public CartDto(List<OrderItemDto> items, int totalPrice) {
+    public CartDto(List<CartItemDto> items, int totalPrice) {
         this.items = items;
         this.totalPrice = totalPrice;
     }

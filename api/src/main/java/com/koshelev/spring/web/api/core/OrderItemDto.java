@@ -1,4 +1,4 @@
-package com.koshelev.spring.web.api.dto;
+package com.koshelev.spring.web.api.core;
 
 
 public class OrderItemDto {
@@ -8,22 +8,11 @@ public class OrderItemDto {
     private int pricePerProduct;
     private int price;
 
-    public OrderItemDto (ProductDto productDto){
-        this.productId = productDto.getId();
-        this.productTitle = productDto.getTitle();
-        this.quantity = 1;
-        this.pricePerProduct = productDto.getCost();
-        this.price = productDto.getCost();
-    }
 
     public OrderItemDto(){
 
     }
 
-    public void changeQuantity(int delta){
-        this.quantity += delta;
-        this.price = this.quantity * this.pricePerProduct;
-    }
 
     public Long getProductId() {
         return productId;
