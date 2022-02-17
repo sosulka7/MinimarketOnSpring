@@ -34,6 +34,7 @@ public class ProductController {
         return productService.findAll(minPrice, maxPrice, titlePart, category, pageNumber).map(productConverter::entityToDto);
     }
 
+
     @PostMapping("/ids")
     public List<ProductDto> getProducts(@RequestBody List<Long> productsId){
         return productService.getProductByListId(productsId).stream().map(productConverter::entityToDto).collect(Collectors.toList());

@@ -57,6 +57,7 @@ public class ProductService {
         List<Product> products = productsId.stream().map(id -> getProductById(id).get()).collect(Collectors.toList());
         return products;
     }
+
     public Product save(Product product) {
         return productRepository.save(product);
     }

@@ -1,10 +1,14 @@
 package com.koshelev.spring.web.cart.controllers;
 
 import com.koshelev.spring.web.api.cart.CartDto;
+import com.koshelev.spring.web.api.core.ProductDto;
 import com.koshelev.spring.web.api.dto.StringResponse;
+import com.koshelev.spring.web.api.exceptions.AppError;
 import com.koshelev.spring.web.cart.converters.CartConverter;
 import com.koshelev.spring.web.cart.services.CartService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -24,6 +28,11 @@ public class CartController {
     @GetMapping("/generate")
     public StringResponse getCart(){
         return new StringResponse(cartService.generateCartUuid());
+    }
+
+    @GetMapping("/error/{id}")
+    public ProductDto testError(@PathVariable Long id){
+        return cartService.myMethod(id);
     }
 
     @GetMapping("/{uuid}/add/{productId}")
