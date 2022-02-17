@@ -1,17 +1,14 @@
 package com.koshelev.spring.web.cart.integrations;
 
 import com.koshelev.spring.web.api.core.ProductDto;
-import com.koshelev.spring.web.api.exceptions.AppError;
 import com.koshelev.spring.web.api.exceptions.ResourceNotFoundException;
-import com.koshelev.spring.web.cart.exceptions.NoConnectionToCoreServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-import java.net.ConnectException;
+
+
 import java.util.Optional;
 
 @Component
@@ -19,7 +16,7 @@ import java.util.Optional;
 public class ProductServiceIntegration {
     private final WebClient coreServiceWebClient;
 
-    public ProductDto findById(Long id){
+    public Optional<ProductDto> findById(Long id){
 
         //В этом варианте он отловит ошибку о том, что не смог найти продукт.
         //Но как отловить то, что сервер вообще не дает ответ, я не придумал
@@ -31,7 +28,7 @@ public class ProductServiceIntegration {
                     })
                     .bodyToMono(ProductDto.class)
                     .block();
-            return productDto;
+            return Optional.ofNullable(productDto);
 
 
     }

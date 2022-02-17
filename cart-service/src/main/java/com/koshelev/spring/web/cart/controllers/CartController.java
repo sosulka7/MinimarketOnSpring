@@ -30,11 +30,6 @@ public class CartController {
         return new StringResponse(cartService.generateCartUuid());
     }
 
-    @GetMapping("/error/{id}")
-    public ProductDto testError(@PathVariable Long id){
-        return cartService.myMethod(id);
-    }
-
     @GetMapping("/{uuid}/add/{productId}")
     public void add(@RequestHeader (required = false) String username, @PathVariable String uuid, @PathVariable Long productId){
         cartService.addToCart(getCurrentCartUuid(username, uuid), productId);
