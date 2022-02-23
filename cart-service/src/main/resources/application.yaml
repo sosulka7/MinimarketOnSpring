@@ -10,6 +10,13 @@ utils:
 integrations:
   core-service:
     url: http://localhost:8189/web-market-core
+    timeouts:
+      connect-timeout: 2000
+      read-timeout: 10000
+      write-timeout: 2000
   rec-service:
     url: http://localhost:8155/web-market-rec
-
+    timeouts:
+      connect-timeout: 2000
+      read-timeout: 10000
+      write-timeout: 2000

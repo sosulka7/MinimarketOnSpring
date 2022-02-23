@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+
 @SpringBootTest
 public class CartServiceTest {
 
@@ -42,8 +44,8 @@ public class CartServiceTest {
 
     @Test
     public void recalculateTest(){
-        ProductDto productDto = new ProductDto(1L, "Product-#1", 100);
-        ProductDto productDto1 = new ProductDto(2L, "Product-#2", 200);
+        ProductDto productDto = new ProductDto(1L, "Product-#1", new BigDecimal(100));
+        ProductDto productDto1 = new ProductDto(2L, "Product-#2", new BigDecimal(200));
         cartService.addToCart("user_cart", 1L);
         cartService.addToCart("user_cart", 2L);
         Assertions.assertEquals(300, cartService.getCurrentCart("user_cart").getTotalPrice());
@@ -53,8 +55,8 @@ public class CartServiceTest {
 
     @Test
     public void mergeTest(){
-        ProductDto productDto = new ProductDto(1L, "Product-#1", 100);
-        ProductDto productDto1 = new ProductDto(2L, "Product-#2", 200);
+        ProductDto productDto = new ProductDto(1L, "Product-#1", new BigDecimal(100));
+        ProductDto productDto1 = new ProductDto(2L, "Product-#2", new BigDecimal(200));
         cartService.addToCart("guest_cart", 1L);
         cartService.addToCart("guest_cart", 2L);
         cartService.addToCart("user_cart", 2L);

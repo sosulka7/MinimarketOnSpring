@@ -1,6 +1,9 @@
 package com.koshelev.spring.web.api.dto;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Обертка для строки")
 public class StringResponse {
     private String value;
 

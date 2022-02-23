@@ -1,12 +1,19 @@
 package com.koshelev.spring.web.api.cart;
 
-import com.koshelev.spring.web.api.core.OrderItemDto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.math.BigDecimal;
 import java.util.List;
 
+@Schema(description = "Модель корзины")
 public class CartDto {
+
+    @Schema(description = "Список пунктов, добавленных в корзину", required = true)
     private List<CartItemDto> items;
-    private int totalPrice;
+
+    @Schema(description = "Полная стоимость пунктов, добавленных в корзину", required = true, example = "165.00")
+    private BigDecimal totalPrice;
 
     public List<CartItemDto> getItems() {
         return items;
@@ -16,15 +23,15 @@ public class CartDto {
         this.items = items;
     }
 
-    public int getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(int totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 
-    public CartDto(List<CartItemDto> items, int totalPrice) {
+    public CartDto(List<CartItemDto> items, BigDecimal totalPrice) {
         this.items = items;
         this.totalPrice = totalPrice;
     }

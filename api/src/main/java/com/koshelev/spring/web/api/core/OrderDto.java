@@ -1,13 +1,29 @@
 package com.koshelev.spring.web.api.core;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 
+@Schema(description = "Основная модель заказа")
 public class OrderDto {
+
+    @Schema(description = "ID заказа", required = true, example = "3")
     private Long id;
+
+    @Schema(description = "Имя пользователя", required = true, example = "bob")
     private String username;
-    private Integer totalPrice;
+
+    @Schema(description = "Суммарная стоимость заказа", required = true, example = "300.00")
+    private BigDecimal totalPrice;
+
+    @Schema(description = "Адрес, на который сделан заказ", required = true, example = "РФ, Питер, ул. Невский проспект, д. 13, кв. 2")
     private String address;
+
+    @Schema(description = "Телефонный номер", required = true, example = "88005553535")
     private String phone;
+
+    @Schema(description = "Позиции заказа", required = true)
     private List<OrderItemDto> orderItems;
 
     public Long getId() {
@@ -26,11 +42,11 @@ public class OrderDto {
         this.username = username;
     }
 
-    public Integer getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -61,7 +77,7 @@ public class OrderDto {
     public OrderDto() {
     }
 
-    public OrderDto(Long id, String username, Integer totalPrice, String address, String phone, List<OrderItemDto> orderItems) {
+    public OrderDto(Long id, String username, BigDecimal totalPrice, String address, String phone, List<OrderItemDto> orderItems) {
         this.id = id;
         this.username = username;
         this.totalPrice = totalPrice;

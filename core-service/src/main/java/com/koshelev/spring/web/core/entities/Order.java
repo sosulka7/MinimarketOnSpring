@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class Order {
     private String username;
 
     @Column(name = "total_price")
-    private Integer totalPrice;
+    private BigDecimal totalPrice;
 
     @Column(name = "address")
     private String address;
@@ -44,7 +45,7 @@ public class Order {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Order(String username, Integer totalPrice, String address, String phone) {
+    public Order(String username, BigDecimal totalPrice, String address, String phone) {
         this.username = username;
         this.totalPrice = totalPrice;
         this.address = address;

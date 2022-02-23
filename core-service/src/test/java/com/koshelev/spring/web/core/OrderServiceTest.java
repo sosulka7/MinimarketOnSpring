@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,14 +32,14 @@ public class OrderServiceTest {
     public void createOrderTest(){
         CartDto cartDto = new CartDto();
         List<CartItemDto> orderItems = new ArrayList<>(Arrays.asList(
-                new CartItemDto(1L, "Product#1", 4, 25, 100)
+                new CartItemDto(1L, "Product#1", 4, new BigDecimal(25), new BigDecimal(25))
         ));
         cartDto.setItems(orderItems);
-        cartDto.setTotalPrice(100);
+        cartDto.setTotalPrice(new BigDecimal(100));
         OrderDetailsDto odd = new OrderDetailsDto();
         odd.setAddress("qwerty");
         odd.setPhoneNumber("88005553535");
-        Product product = new Product(1L, "Product#1", 25);
+        Product product = new Product(1L, "Product#1", new BigDecimal(25.00));
         Mockito.when(productService.getProductById(1L)).thenReturn(Optional.of(product));
         orderService.createOrder(odd, "username");
     }

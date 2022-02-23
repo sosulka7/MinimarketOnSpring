@@ -1,9 +1,13 @@
 package com.koshelev.spring.web.rec.configs;
 
+import com.koshelev.spring.web.rec.properties.CoreServiceIntegrationProperties;
+import com.koshelev.spring.web.rec.properties.TimeoutsForCoreServiceIntegration;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -14,23 +18,25 @@ import reactor.netty.tcp.TcpClient;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
+@EnableConfigurationProperties(
+        {CoreServiceIntegrationProperties.class, TimeoutsForCoreServiceIntegration.class}
+)
+@RequiredArgsConstructor
 public class WebClientConfig {
 
-    @Value("${integrations.core-service.url}")
-    private String coreServiceUrl;
+    private final CoreServiceIntegrationProperties coreServiceIntegrationProperties;
 
     @Bean
     public WebClient coreServiceWebClient(){
         TcpClient tcpClient = TcpClient
                 .create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 2000)
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, coreServiceIntegrationProperties.getTimeouts().getConnectTimeout())
                 .doOnConnected(connection -> {
-                    connection.addHandlerLast(new ReadTimeoutHandler(10000, TimeUnit.MILLISECONDS));
-                    connection.addHandlerLast(new WriteTimeoutHandler(2000, TimeUnit.MILLISECONDS));
+                    connection.addHandlerLast(new ReadTimeoutHandler(coreServiceIntegrationProperties.getTimeouts().getWriteTimeout(), TimeUnit.MILLISECONDS));
                 });
         return WebClient
                 .builder()
-                .baseUrl(coreServiceUrl)
+                .baseUrl(coreServiceIntegrationProperties.getUrl())
                 .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
                 .build();
     }

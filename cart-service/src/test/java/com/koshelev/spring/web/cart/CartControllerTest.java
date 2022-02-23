@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -38,17 +39,17 @@ public class CartControllerTest {
     public void getCartTest() throws Exception{
         Cart cart = new Cart();
         cart.setItems(Arrays.asList(
-                new CartItem(1L, "Product#1", 4, 25, 100),
-                new CartItem(2L, "Product#2", 3, 33, 99)
+                new CartItem(1L, "Product#1", 4, new BigDecimal(25), new BigDecimal(100)),
+                new CartItem(2L, "Product#2", 3, new BigDecimal(33), new BigDecimal(99))
         ));
-        cart.setTotalPrice(199);
+        cart.setTotalPrice(new BigDecimal(199));
 
         CartDto cartDto = new CartDto();
         cartDto.setItems(Arrays.asList(
-                new CartItemDto(1L, "Product#1", 4, 25, 100),
-                new CartItemDto(2L, "Product#2", 3, 33, 99)
+                new CartItemDto(1L, "Product#1", 4, new BigDecimal(25), new BigDecimal(100)),
+                new CartItemDto(2L, "Product#2", 3, new BigDecimal(33), new BigDecimal(99))
         ));
-        cartDto.setTotalPrice(199);
+        cartDto.setTotalPrice(new BigDecimal(199));
 
         System.out.println(cart.getTotalPrice());
 

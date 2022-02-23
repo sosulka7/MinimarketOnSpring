@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -38,8 +39,8 @@ public class ProductControllerTest {
 
     @Test
     public void getProductByIdTest() throws Exception{
-        Product product = new Product(5L, "Product", 45);
-        ProductDto productDto = new ProductDto(5L, "Product", 45);
+        Product product = new Product(5L, "Product", new BigDecimal(45));
+        ProductDto productDto = new ProductDto(5L, "Product", new BigDecimal(45));
         Mockito.when(productService.getProductById(5L)).thenReturn(Optional.of(product));
         Mockito.when(productConverter.entityToDto(product)).thenReturn(productDto);
         mvc
