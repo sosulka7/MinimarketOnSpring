@@ -1,6 +1,7 @@
 package com.koshelev.spring.web.cart.services;
 
 import com.koshelev.spring.web.api.core.ProductDto;
+import com.koshelev.spring.web.api.exceptions.AppError;
 import com.koshelev.spring.web.api.exceptions.ResourceNotFoundException;
 import com.koshelev.spring.web.cart.integrations.ProductServiceIntegration;
 import com.koshelev.spring.web.cart.integrations.RecServiceIntegration;
@@ -8,6 +9,7 @@ import com.koshelev.spring.web.cart.models.Cart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -34,13 +36,13 @@ public class CartService {
         return UUID.randomUUID().toString();
     }
 
-
     public Cart getCurrentCart(String cartKey){
         if (!redisTemplate.hasKey(cartKey)){
             redisTemplate.opsForValue().set(cartKey, new Cart());
         }
         return (Cart) redisTemplate.opsForValue().get(cartKey);
     }
+
     public void addToCart(String cartKey, Long id){
         ProductDto productDto = productServiceIntegration.findById(id).orElseThrow(() -> new ResourceNotFoundException("Невозможно добавить продукт в корзину. Продукт не найден. ID: " + id));
         recServiceIntegration.addProductToRecService(productDto.getId());
@@ -76,4 +78,5 @@ public class CartService {
     public void updateCart(String cartKey, Cart cart){
         redisTemplate.opsForValue().set(cartKey, cart);
     }
+
 }

@@ -72,6 +72,7 @@ angular.module('market-front').controller('indexController', function ($scope, $
                     $location.path('/store');
                 }
             }, function errorCallback(response) {
+                alert(response.data.message)
             });
     };
 

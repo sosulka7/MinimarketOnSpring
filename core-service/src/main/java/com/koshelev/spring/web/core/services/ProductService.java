@@ -1,5 +1,6 @@
 package com.koshelev.spring.web.core.services;
 
+import com.koshelev.spring.web.api.cart.CartDto;
 import com.koshelev.spring.web.api.exceptions.ResourceNotFoundException;
 import com.koshelev.spring.web.api.core.ProductDto;
 import com.koshelev.spring.web.core.entities.Product;
@@ -57,6 +58,7 @@ public class ProductService {
         List<Product> products = productsId.stream().map(id -> getProductById(id).get()).collect(Collectors.toList());
         return products;
     }
+
     public Product save(Product product) {
         return productRepository.save(product);
     }

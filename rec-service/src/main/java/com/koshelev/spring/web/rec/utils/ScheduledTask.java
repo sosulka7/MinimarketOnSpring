@@ -1,7 +1,6 @@
 package com.koshelev.spring.web.rec.utils;
 
-import com.koshelev.spring.web.rec.entities.PopularItemInCart;
-import com.koshelev.spring.web.rec.repositories.PopularItemInCartRepository;
+
 import com.koshelev.spring.web.rec.services.PopularItemInCartService;
 import com.koshelev.spring.web.rec.services.PopularItemInOrderService;
 import lombok.RequiredArgsConstructor;
