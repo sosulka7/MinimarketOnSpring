@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+/core-service/src/main/resources/secret.properties

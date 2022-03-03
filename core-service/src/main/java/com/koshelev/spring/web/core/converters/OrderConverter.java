@@ -18,7 +18,7 @@ public class OrderConverter {
     }
 
     public OrderDto entityToDto(Order order){
-        return new OrderDto(order.getId(), order.getUsername(), order.getTotalPrice(), order.getAddress(), order.getAddress()
-                ,order.getOrderItems().stream().map(orderItemConverter::entityToDto).collect(Collectors.toList()));
+        return new OrderDto(order.getId(), order.getUsername(), order.getTotalPrice(), order.getAddress(), order.getPhone()
+                ,order.getOrderStatus().toString(),order.getOrderItems().stream().map(orderItemConverter::entityToDto).collect(Collectors.toList()));
     }
 }

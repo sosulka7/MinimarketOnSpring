@@ -2,12 +2,15 @@ package com.koshelev.spring.web.core;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
+
 
 @SpringBootApplication
-public class Application {
+@PropertySource("secret.properties")
+public class CoreApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(CoreApplication.class, args);
 	}
 
 }

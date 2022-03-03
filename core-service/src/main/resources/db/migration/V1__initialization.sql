@@ -62,6 +62,7 @@ create table orders
     total_price numeric(8, 2) not null,
     address     varchar(255),
     phone       varchar(255),
+    order_status   varchar(45) not null,
     created_at  timestamp default current_timestamp,
     updated_at  timestamp default current_timestamp
 );
@@ -77,4 +78,7 @@ create table order_items
     created_at        timestamp default current_timestamp,
     updated_at        timestamp default current_timestamp
 );
+
+
+
 

@@ -1,6 +1,7 @@
 package com.koshelev.spring.web.core.controllers;
 
 import com.koshelev.spring.web.api.cart.CartDto;
+import com.koshelev.spring.web.api.exceptions.ResourceNotFoundException;
 import com.koshelev.spring.web.core.converters.OrderConverter;
 
 import com.koshelev.spring.web.api.core.OrderDetailsDto;
@@ -60,4 +61,8 @@ public class OrderController {
                 .map(orderConverter::entityToDto).collect(Collectors.toList());
     }
 
+    @GetMapping("/{id}")
+    public OrderDto getOrderById(@PathVariable Long id) {
+        return orderConverter.entityToDto(orderService.findById(id).orElseThrow(() -> new ResourceNotFoundException("ORDER 404")));
+    }
 }

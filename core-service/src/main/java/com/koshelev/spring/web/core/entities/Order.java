@@ -10,12 +10,17 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 @Entity
 @Table(name = "orders")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
+
+    public enum OrderStatus{
+        CREATED, CANCELED, PAID
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +42,10 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<OrderItem> orderItems;
 
+    @Column(name = "order_status")
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -45,10 +54,11 @@ public class Order {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Order(String username, BigDecimal totalPrice, String address, String phone) {
+    public Order(String username, BigDecimal totalPrice, String address, String phone, OrderStatus orderStatus) {
         this.username = username;
         this.totalPrice = totalPrice;
         this.address = address;
         this.phone = phone;
+        this.orderStatus = orderStatus;
     }
 }

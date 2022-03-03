@@ -1,7 +1,6 @@
 package com.koshelev.spring.web.core.services;
 
 import com.koshelev.spring.web.api.cart.CartDto;
-import com.koshelev.spring.web.api.core.ProductDto;
 import com.koshelev.spring.web.api.exceptions.ResourceNotFoundException;
 import com.koshelev.spring.web.api.core.OrderDetailsDto;
 import com.koshelev.spring.web.core.entities.Order;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,7 +28,7 @@ public class OrderService {
     @Transactional
     public void createOrder(OrderDetailsDto odd, String username){
         CartDto cartDto = cartServiceIntegration.getUserCart(username);
-        Order order = new Order(username, cartDto.getTotalPrice(), odd.getAddress(), odd.getPhoneNumber());
+        Order order = new Order(username, cartDto.getTotalPrice(), odd.getAddress(), odd.getPhoneNumber(), Order.OrderStatus.CREATED);
         List<OrderItem> items = cartDto.getItems().stream()
                 .map(o -> {
                     OrderItem item = new OrderItem();
@@ -49,4 +49,14 @@ public class OrderService {
         return orderRepository.findAllByUsername(username);
     }
 
+    @Transactional
+    public void updateOrderStatus(Long orderId, Order.OrderStatus status){
+        Order order = findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Заказ не найден"));
+        order.setOrderStatus(status);
+        orderRepository.save(order);
+    }
+
+    public Optional<Order> findById(Long orderId) {
+        return orderRepository.findById(orderId);
+    }
 }
