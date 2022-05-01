@@ -66,51 +66,5 @@
             </nav>
         </div>
 
-        <div>
-            <h3>5 самых заказываемых товаров</h3>
-            <table class="table table-hover">
-                <tr>
-                    <td>ID</td>
-                    <td>Название</td>
-                    <td>Цена</td>
-                    <td></td>
-                </tr>
-                <tbody>
-                <tr ng-repeat="p in PopularProductsInOrder">
-                    <td>{{p.id}}</td>
-                    <td>{{p.title}}</td>
-                    <td>{{p.cost}}</td>
-                    <td>
-                        <button class="btn btn-primary" ng-click="addToCart(p.id)">Добавить в корзину</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <p></p>
-        </div>
-
-        <div>
-            <h3>5 самых складываемых товаров в корзину</h3>
-            <table class="table table-hover">
-                <tr>
-                    <td>ID</td>
-                    <td>Название</td>
-                    <td>Цена</td>
-                    <td></td>
-                </tr>
-                <tbody>
-                <tr ng-repeat="p in PopularProductsInCart">
-                    <td>{{p.id}}</td>
-                    <td>{{p.title}}</td>
-                    <td>{{p.cost}}</td>
-                    <td>
-                        <button class="btn btn-primary" ng-click="addToCart(p.id)">Добавить в корзину</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <p></p>
-        </div>
-
     </div>
 </div>

@@ -13,10 +13,10 @@ public class RecServiceIntegration {
     private final WebClient recServiceWebClient;
 
     public void addProductToRecService(Long productsId){
-        recServiceWebClient.post()
-                .uri("/api/v1/in_cart/" + productsId)
-                .retrieve()
-                .toBodilessEntity()
-                .block();
+//        recServiceWebClient.post()
+//                .uri("/api/v1/in_cart/" + productsId)
+//                .retrieve()
+//                .toBodilessEntity()
+//                .block();
     }
 }

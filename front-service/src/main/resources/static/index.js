@@ -61,11 +61,8 @@ angular.module('market-front').controller('indexController', function ($scope, $
                 if (response.data.token) {
                     $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
                     $localStorage.springWebUser = {username: $scope.user.username, token: response.data.token};
-
                     $scope.user.username = null;
                     $scope.user.password = null;
-
-
                     $http.get('http://localhost:5555/cart/api/v1/cart/' + $localStorage.springWebGuestCartId + '/merge')
                         .then(function successCallback(response){
                         });

@@ -1,8 +1,11 @@
 package com.koshelev.spring.web.auth.services;
 
 
+import com.koshelev.spring.web.auth.dto.NewUserDto;
 import com.koshelev.spring.web.auth.entities.Role;
 import com.koshelev.spring.web.auth.entities.User;
+import com.koshelev.spring.web.auth.exceptions.UserAlreadyExist;
+import com.koshelev.spring.web.auth.repositories.RoleRepository;
 import com.koshelev.spring.web.auth.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,10 +13,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,6 +28,8 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
     public Optional<User> findByUsername(String username){
         return userRepository.findByUsername(username);
@@ -38,21 +46,22 @@ public class UserService implements UserDetailsService {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
 
-//    public User registrationNewUser(UserDto userDto){
-//        if (emailExist(userDto.getEmail())){
-//            throw new UserAlreadyExist(String.format("Пользователь с почтой '%s' уже существует.", userDto.getEmail()));
-//        }
-//        if (usernameExist(userDto.getUsername())){
-//            throw new UserAlreadyExist(String.format("Пользователь с логином '%s' уже существует.", userDto.getUsername()));
-//        }
-//
-//        //Здесь должны быть хэширование пароля, конвертация Dto в Entity и сохранение Usera в бд.
-//        //После чего возвращаем User'a или UserDto
-//        //Также не доделал саму конвертацию. Еще под вопросом - правильность UserDto.
-//        return new User();
-//    }
-
-    private boolean usernameExist(String username){
-        return userRepository.findByUsername(username).isPresent();
+    public void registrationNewUser(NewUserDto newUserDto){
+        if (usernameAndEmailExist(newUserDto.getUsername(), newUserDto.getEmail())){
+            throw new UserAlreadyExist("Пользователь с указанной никнеймом или почтой уже существует.");
+        }
+        User user = new User();
+        user.setUsername(newUserDto.getUsername());
+        user.setPassword(passwordEncoder.encode(newUserDto.getPassword()));
+        user.setEmail(newUserDto.getEmail());
+        Role role = roleService.getRoleByName("ROLE_USER");
+        user.setRoles(List.of(role));
+        userRepository.save(user);
     }
+
+    private boolean usernameAndEmailExist(String username, String email){
+        return userRepository.findByUsername(username).isPresent() || userRepository.findByEmail(email).isPresent();
+    }
+
+
 }

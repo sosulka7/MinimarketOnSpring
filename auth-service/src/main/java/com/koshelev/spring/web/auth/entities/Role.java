@@ -8,9 +8,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Data
 @Entity
 @Table(name = "roles")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role {
