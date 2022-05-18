@@ -72,8 +72,6 @@ public class ProductService {
         return product;
     }
 
-    //Как бы и сущность переименовывать не хотелось бы и сгенерированный класс тоже
-    //поэтому оставил так. Не знаю, как лучше сделать.
     public List<com.koshelev.spring.web.core.products.Product> getAllProductsSoap(){
         return productRepository.findAll().stream().map(functionEntityToSoap).collect(Collectors.toList());
     }

@@ -18,6 +18,7 @@ public class ProductServiceIntegration {
 
     public Optional<ProductDto> findById(Long id){
 
+        //TODO: доделать
         //В этом варианте он отловит ошибку о том, что не смог найти продукт.
         //Но как отловить то, что сервер вообще не дает ответ, я не придумал
             ProductDto productDto = coreServiceWebClient.get()

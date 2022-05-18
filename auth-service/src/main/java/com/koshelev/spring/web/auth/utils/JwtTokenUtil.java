@@ -41,21 +41,4 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-//    public String getUsernameFromToken (String token){
-//        return getClaimsFromToken(token, Claims::getSubject);
-//    }
-//
-//    public List<String> getRoles (String token){
-//        return getClaimsFromToken(token, (Function<Claims, List<String>>) claims -> claims.get("roles", List.class));
-//    }
-//    private <T> T getClaimsFromToken(String token, Function<Claims, T> claimsResolver){
-//        Claims claims = getAllClaimsFromToken(token);
-//        return claimsResolver.apply(claims);
-//    }
-//    private Claims getAllClaimsFromToken(String token){
-//        return Jwts.parser()
-//                .setSigningKey(secret)
-//                .parseClaimsJws(token)
-//                .getBody();
-//    }
 }

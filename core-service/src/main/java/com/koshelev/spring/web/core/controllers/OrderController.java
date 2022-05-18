@@ -56,6 +56,7 @@ public class OrderController {
     )
     @GetMapping
     public List<OrderDto> getCurrentUserOrders(@RequestHeader @Parameter(required = true) String username){
+
         return orderService.findOrdersByUsername(username).stream()
                 .map(orderConverter::entityToDto).collect(Collectors.toList());
     }
